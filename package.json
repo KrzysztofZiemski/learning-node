@@ -3,18 +3,25 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-   "watch":"",
-   "start:backend":"npm run dev --prefix backend",
-   "start:frontend":"npm start --prefix frontend",
-   "start:all-shell":"start npm run start:frontend && start npm run start:backend",
-   "start:all-bash":"npm run start:frontend & npm run start:backend",
-   "start":" npm run start:all-bash",
-   "install:frontend":"npm install --prefix frontend",
-   "install:backend":"npm install --prefix backend",
-   "install:all-shell":"start npm run install:frontend && start npm run install:backend",
-   "install:all-bash":"npm run install:frontend & npm run install:backend"
+    "watch": "",
+    "start:backend": "npm run dev --prefix backend",
+    "start:frontend": "npm start --prefix frontend",
+    "start:all-shell": "start npm run start:frontend && start npm run start:backend",
+    "start:all-bash": "npm run start:frontend & npm run start:backend",
+    "start": " npm run start:all-bash",
+    "install:frontend": "npm install --prefix frontend",
+    "install:backend": "npm install --prefix backend",
+    "install:all-shell": "start npm run install:frontend && start npm run install:backend",
+    "install:all-bash": "npm run install:frontend & npm run install:backend",
+    "deploy": "npm run build --prefix frontend & npm run start:backend"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@types/morgan": "^1.9.4"
+  }
 }

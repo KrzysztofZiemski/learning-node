@@ -29,3 +29,5 @@ export const loadPlanetData = (): Promise<IPlanet[]> => {
       });
   });
 };
+
+export const getAllPlanets = () => planets;

@@ -1,9 +1,9 @@
 import { IRouterFunction } from "../../interfaces/router";
-import { planets } from "../../models/planets.model";
+import { getAllPlanets } from "../../models/planets.model";
 
-export const getAllPlanets: IRouterFunction = async (_, res) => {
+export const httpGetAllPlanets: IRouterFunction = async (_, res) => {
   try {
-    return res.status(200).json(planets);
+    return res.status(200).json(getAllPlanets());
   } catch (err) {
     return res.status(500).json(err);
   }
