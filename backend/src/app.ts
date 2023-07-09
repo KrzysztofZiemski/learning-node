@@ -3,7 +3,7 @@ import planetsRouter from "./routes/planets/planets.router";
 import cors, { CorsOptions } from "cors";
 import { join } from "path";
 import morgan from "morgan";
-import { launchesRouter } from "./routes/planets/launches.router";
+import { launchesRouter } from "./routes/launches/launches.router";
 
 const app = express();
 
