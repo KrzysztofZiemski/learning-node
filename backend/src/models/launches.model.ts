@@ -9,13 +9,17 @@ const init: Launch = {
   launchDate: new Date("1 December 2023"),
   destination: "Kepler-442 b",
   customers: ["ZTM", "Nasa"],
-  upcoming: false,
+  upcoming: true,
   success: false,
 };
 export const launches: Map<string, Launch> = new Map([["100", init]]);
 
 export const getAllLaunches = () => {
   return Array.from(launches.values());
+};
+
+export const getLaunch = (id: string) => {
+  return launches.get(id);
 };
 
 export const addNewLaunch = (data: LaunchPayload) => {
@@ -28,5 +32,15 @@ export const addNewLaunch = (data: LaunchPayload) => {
     success: true,
   });
   launches.set(`${latestFlyNumber}`, launch);
+  return launch;
+};
+
+export const abortLaunch = (id: string) => {
+  const launch = getLaunch(id);
+
+  if (!launch) return undefined;
+
+  launch.upcoming = false;
+  launch.success = false;
   return launch;
 };

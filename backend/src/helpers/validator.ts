@@ -7,7 +7,11 @@ export class Validator {
     data: unknown,
     scheme: Record<
       string,
-      { min?: number; max?: number; date?: "date" | "later" | "earlier" }
+      {
+        string?: { min?: number; max?: number };
+        date?: "date" | "later" | "earlier";
+        number?: { min?: number; max?: number };
+      }
     >
   ) {
     const invalidFields: string[] = [];
@@ -38,14 +42,23 @@ export class Validator {
         }
       }
 
-      if (validation.min) {
-        if (typeof field !== "string" || validation.min > field.length)
-          return invalidFields.push(key);
+      if (validation.string) {
+        if (typeof field !== "string") return invalidFields.push(key);
+
+        const max = validation.string.max;
+        const min = validation.string.min;
+        if (max && max < field.length) return invalidFields.push(key);
+        if (min && min > field.length) return invalidFields.push(key);
       }
 
-      if (validation.max) {
-        if (typeof field !== "string" || validation.max < field.length)
+      if (validation.number) {
+        if (typeof field !== "number" || Number.isNaN(field))
           return invalidFields.push(key);
+        const max = validation.number.max;
+        const min = validation.number.min;
+
+        if (max && max < field) return invalidFields.push(key);
+        if (min && min > field) return invalidFields.push(key);
       }
     });
 
