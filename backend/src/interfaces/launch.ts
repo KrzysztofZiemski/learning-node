@@ -8,3 +8,6 @@ export interface Launch {
   upcoming: boolean;
   success: boolean;
 }
+
+export interface LaunchPayload
+  extends Omit<Launch, "flightNumber" | "upcoming" | "success" | "customers"> {}

@@ -32,8 +32,9 @@ app.use(express.json());
 
 //routers
 
-app.use(planetsRouter);
-app.use(launchesRouter);
+app.use("/planets", planetsRouter);
+app.use("/launches", launchesRouter);
+
 app.get("/*", (_, res) => {
   res.sendFile(join(__dirname, "..", "public", "index.html"));
 });

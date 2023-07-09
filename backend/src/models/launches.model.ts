@@ -1,4 +1,6 @@
-import { Launch } from "../interfaces/launch";
+import { Launch, LaunchPayload } from "../interfaces/launch";
+
+let latestFlyNumber = 100;
 
 const init: Launch = {
   flightNumber: 100,
@@ -14,4 +16,17 @@ export const launches: Map<string, Launch> = new Map([["100", init]]);
 
 export const getAllLaunches = () => {
   return Array.from(launches.values());
+};
+
+export const addNewLaunch = (data: LaunchPayload) => {
+  latestFlyNumber++;
+
+  const launch = Object.assign(data, {
+    flightNumber: latestFlyNumber,
+    customers: ["ZTM", "NASA"],
+    upcoming: true,
+    success: true,
+  });
+  launches.set(`${latestFlyNumber}`, launch);
+  return launch;
 };
