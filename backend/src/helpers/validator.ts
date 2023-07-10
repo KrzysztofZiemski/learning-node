@@ -29,7 +29,13 @@ export class Validator {
       if (!field) return invalidFields.push(key);
 
       if (validation.date) {
-        if (!(field instanceof Date)) return invalidFields.push(key);
+        console.log(
+          "validation.date",
+          field,
+          field.toString() === "Invalid Date"
+        );
+        if (!(field instanceof Date) || field.toString() === "Invalid Date")
+          return invalidFields.push(key);
 
         const today = new Date();
         const dateField = field as Date;

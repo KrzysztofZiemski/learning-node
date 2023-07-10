@@ -13,6 +13,7 @@ export const httpGetAllLaunches: IRouterFunction = (_, res) => {
 
 export const httpAddNewLaunch: IRouterFunction = (req, res) => {
   const launch = req.body;
+
   launch.launchDate = new Date(launch.launchDate);
 
   const invalidFields = Validator.validate(launch, {
