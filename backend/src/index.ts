@@ -4,7 +4,6 @@ import os from "os";
 import "dotenv/config";
 import app from "./app";
 import { loadPlanetData } from "./models/planets.model";
-import { env } from "process";
 
 const PORT = process.env.PORT || 8000;
 
@@ -17,19 +16,21 @@ async function startServer() {
     console.log(`listen on port ${PORT}`);
   });
 }
+startServer();
 
-if (cluster.isPrimary) {
-  const MAX_PROCESS_TAKEN = process.env.MAX_PROCESS_TAKEN;
-  const cpusAvailable = os.cpus().length;
+//for run cluster without pm2
+// if (cluster.isPrimary) {
+//   const MAX_PROCESS_TAKEN = process.env.MAX_PROCESS_TAKEN;
+//   const cpusAvailable = os.cpus().length;
 
-  const numberOfWorkers = MAX_PROCESS_TAKEN
-    ? Math.min(Number(MAX_PROCESS_TAKEN), cpusAvailable)
-    : cpusAvailable;
+//   const numberOfWorkers = MAX_PROCESS_TAKEN
+//     ? Math.min(Number(MAX_PROCESS_TAKEN), cpusAvailable)
+//     : cpusAvailable;
 
-  Array.from({ length: numberOfWorkers }).forEach(() => {
-    cluster.fork();
-    console.log("cluster has been started");
-  });
-} else {
-  startServer();
-}
+//   Array.from({ length: numberOfWorkers }).forEach(() => {
+//     cluster.fork();
+//     console.log("cluster has been started");
+//   });
+// } else {
+// startServer();
+// }

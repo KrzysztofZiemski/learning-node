@@ -1,10 +1,12 @@
 import express from "express";
+import fs from "fs";
 import cors, { CorsOptions } from "cors";
 import morgan from "morgan";
 import { join } from "path";
 
 import planetsRouter from "./routes/planets/planets.router";
 import { launchesRouter } from "./routes/launches/launches.router";
+import { initLogs } from "./lib/initLogs";
 
 const app = express();
 
@@ -27,7 +29,8 @@ const corsOptions: CorsOptions | undefined = isProd
     }
   : undefined;
 app.use(cors(corsOptions));
-app.use(morgan("combined"));
+
+app.use(initLogs);
 app.use(express.static(join(__dirname, "..", "public")));
 app.use(express.json());
 
