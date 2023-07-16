@@ -2,60 +2,63 @@ import { ErrorResponse } from "../../helpers/errorResponse";
 import { Validator } from "../../helpers/validator";
 import { IRouterFunction } from "../../interfaces/router";
 import {
-  addNewLaunch,
+  saveLaunch,
   getAllLaunches,
   abortLaunch,
+  getLaunch,
 } from "../../models/launches.model";
+import { validateLaunch } from "./launches.validator";
 
-export const httpGetAllLaunches: IRouterFunction = (_, res) => {
-  res.status(200).json(getAllLaunches());
+export const httpGetAllLaunches: IRouterFunction = async (_, res) => {
+  res.status(200).json(await getAllLaunches());
 };
 
-export const httpAddNewLaunch: IRouterFunction = (req, res) => {
+export const httpAddNewLaunch: IRouterFunction = async (req, res) => {
   const launch = req.body;
 
   launch.launchDate = new Date(launch.launchDate);
 
-  const invalidFields = Validator.validate(launch, {
-    launchDate: {
-      date: "later",
-    },
-    mission: {
-      string: {
-        min: 1,
-      },
-    },
-    rocket: {
-      string: {
-        min: 1,
-      },
-    },
-    destination: {
-      string: {
-        min: 1,
-      },
-    },
-  });
+  const invalidFields = validateLaunch(launch);
 
   if (invalidFields.length) {
     return res.status(400).json(ErrorResponse.generate(400, invalidFields));
   }
 
-  const addedLaunch = addNewLaunch(launch);
-  res.status(201).json(addedLaunch);
+  try {
+    const addedLaunch = await saveLaunch(launch);
+    res.status(201).json(addedLaunch);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json(ErrorResponse.generate(500, [JSON.stringify(err)]));
+  }
 };
 
-export const httpAbortLaunch: IRouterFunction = (req, res) => {
-  const id = req.params.id;
+export const httpAbortLaunch: IRouterFunction = async (req, res) => {
+  const flightNumber = Number(req.params.id);
 
-  const validation = Validator.validate({ id }, { id: { string: { min: 1 } } });
+  const validation = Validator.validate(
+    { flightNumber },
+    { flightNumber: { number: {} } }
+  );
 
   if (validation.length)
     return res.status(400).json(ErrorResponse.generate(400, validation));
 
-  const aborted = abortLaunch(id);
+  try {
+    const launch = await getLaunch(flightNumber);
+    if (!launch) {
+      return res
+        .status(404)
+        .json(ErrorResponse.generate(404, ["flightNumber"]));
+    }
 
-  if (!aborted) res.status(404).json(ErrorResponse.generate(404, validation));
+    const isOk = await abortLaunch(flightNumber);
 
-  return res.status(200).json(aborted);
+    if (!isOk)
+      return res.status(400).json(ErrorResponse.generate(500, ["not aborted"]));
+
+    return res.status(200).json({});
+  } catch (err) {
+    res.status(500).json(ErrorResponse.generate(500, [JSON.stringify(err)]));
+  }
 };

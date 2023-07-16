@@ -1,46 +1,59 @@
-import { Launch, LaunchPayload } from "../interfaces/launch";
+import { LaunchPayload } from "../interfaces/launch";
+import { launches } from "./lauches.mongo";
+import { planets } from "./planets.mongo";
 
-let latestFlyNumber = 100;
+const DEFAULT_FLIGHT_NUMBER = 100;
 
-const init: Launch = {
-  flightNumber: 100,
-  mission: "Kepler Exploration X",
-  rocket: "Explorer IS1",
-  launchDate: new Date("1 December 2023"),
-  destination: "Kepler-442 b",
-  customers: ["ZTM", "Nasa"],
-  upcoming: true,
-  success: false,
-};
-export const launches: Map<string, Launch> = new Map([["100", init]]);
-
-export const getAllLaunches = () => {
-  return Array.from(launches.values());
+export const getAllLaunches = async () => {
+  return await launches.find({}, { __v: 0 });
 };
 
-export const getLaunch = (id: string) => {
-  return launches.get(id);
+export const getLaunch = async (flightNumber: number) => {
+  return await launches.findOne({ flightNumber }, { __v: 0 });
 };
 
-export const addNewLaunch = (data: LaunchPayload) => {
-  latestFlyNumber++;
+const getLastLaunchFlightNumber = async () => {
+  const result = await launches.findOne().sort("-flightNumber");
 
-  const launch = Object.assign(data, {
-    flightNumber: latestFlyNumber,
-    customers: ["ZTM", "NASA"],
-    upcoming: true,
-    success: true,
-  });
-  launches.set(`${latestFlyNumber}`, launch);
-  return launch;
+  if (!result) return DEFAULT_FLIGHT_NUMBER;
+
+  return result.flightNumber;
 };
 
-export const abortLaunch = (id: string) => {
-  const launch = getLaunch(id);
+export const saveLaunch = async (data: LaunchPayload) => {
+  const planet = await planets.findOne({ keplerName: data.destination });
+  if (!planet) throw new Error("No matching planet founded");
 
-  if (!launch) return undefined;
+  const customers = ["ZTM", "NASA"];
+  const upcoming = true;
+  const success = true;
 
-  launch.upcoming = false;
-  launch.success = false;
-  return launch;
+  if (!data.flightNumber) {
+    const lastLaunch = await getLastLaunchFlightNumber();
+    data.flightNumber = lastLaunch + 1;
+  }
+
+  await launches.findOneAndUpdate(
+    { flightNumber: data.flightNumber },
+    Object.assign(data, { customers, upcoming, success }),
+    {
+      upsert: true,
+    }
+  );
+
+  return data;
+};
+
+export const abortLaunch = async (flightNumber: number) => {
+  const abortedData = await launches.updateOne(
+    { flightNumber },
+    {
+      upcoming: false,
+      success: false,
+    }
+  );
+  const isOk =
+    abortedData.modifiedCount === 1 && abortedData.modifiedCount === 1;
+
+  return isOk;
 };

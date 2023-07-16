@@ -1,1 +1,3 @@
-export type IPlanet = Record<string, number | boolean | string>;
+export type IPlanet = {
+  keplerName: string;
+};

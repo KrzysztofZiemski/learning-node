@@ -10,4 +10,6 @@ export interface Launch {
 }
 
 export interface LaunchPayload
-  extends Omit<Launch, "flightNumber" | "upcoming" | "success" | "customers"> {}
+  extends Omit<Launch, "flightNumber" | "upcoming" | "success" | "customers"> {
+  flightNumber?: number;
+}

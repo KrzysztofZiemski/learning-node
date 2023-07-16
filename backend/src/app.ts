@@ -1,9 +1,7 @@
 import express from "express";
 import fs from "fs";
 import cors, { CorsOptions } from "cors";
-import morgan from "morgan";
 import { join } from "path";
-
 import planetsRouter from "./routes/planets/planets.router";
 import { launchesRouter } from "./routes/launches/launches.router";
 import { initLogs } from "./lib/initLogs";

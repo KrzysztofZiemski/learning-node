@@ -6,6 +6,8 @@ export class ErrorResponse {
 
       case 404:
         return { error: "Not found", fields: [] };
+      case 500:
+        return { error: "Server error", fields: [] };
       default:
         return { error: "Invalid input Data", fields: errors.join(",") };
     }
