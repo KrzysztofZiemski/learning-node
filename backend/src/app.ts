@@ -5,6 +5,7 @@ import { join } from "path";
 import planetsRouter from "./routes/planets/planets.router";
 import { launchesRouter } from "./routes/launches/launches.router";
 import { initLogs } from "./lib/initLogs";
+import { apiV1 } from "./routes/api_v1";
 
 const app = express();
 
@@ -33,9 +34,7 @@ app.use(express.static(join(__dirname, "..", "public")));
 app.use(express.json());
 
 //routers
-
-app.use("/planets", planetsRouter);
-app.use("/launches", launchesRouter);
+app.use("/v1", apiV1);
 
 app.get("/*", (_, res) => {
   res.sendFile(join(__dirname, "..", "public", "index.html"));

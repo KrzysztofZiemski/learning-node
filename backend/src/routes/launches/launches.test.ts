@@ -16,7 +16,7 @@ describe("Launches API", () => {
 
   describe("Test GET /launches", () => {
     test("It should respond withh 200 success", async () => {
-      const response = await request(app).get("/launches");
+      const response = await request(app).get("/v1/launches");
       expect(response.statusCode).toEqual(200);
       expect(response.headers["content-type"]).toMatch(/json/);
     });
@@ -31,7 +31,7 @@ describe("Launches API", () => {
       };
 
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .set("Accept", "application/json")
         .send(payload);
       expect(response.statusCode).toEqual(201);
@@ -48,7 +48,7 @@ describe("Launches API", () => {
         launchDate: dateInFuture,
       };
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .set("Accept", "application/json")
         .send(payload);
       expect(response.statusCode).toEqual(400);
@@ -66,7 +66,7 @@ describe("Launches API", () => {
         launchDate: "zoot",
       };
       const response = await request(app)
-        .post("/launches")
+        .post("/v1/launches")
         .set("Accept", "application/json")
         .send(payload);
       expect(response.statusCode).toEqual(400);
