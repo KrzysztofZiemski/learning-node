@@ -1,4 +1,4 @@
-import { Schema, model, UpdateWriteOpResult } from "mongoose";
+import { Schema, model } from "mongoose";
 
 const launchesSchema = new Schema({
   flightNumber: {

@@ -4,7 +4,8 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "test": "jest",
+    "test": "jest --setupFiles dotenv/config --detectOpenHandles",
+    "test:watch":"jest --watch --setupFiles dotenv/config",
     "dev": "nodemon",
     "pm2:start":"pm2 start src/index.ts -l logs.txt -i max",
     "pm2:stop":"pm2 stop all"

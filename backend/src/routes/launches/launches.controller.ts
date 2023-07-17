@@ -27,8 +27,10 @@ export const httpAddNewLaunch: IRouterFunction = async (req, res) => {
   try {
     const addedLaunch = await saveLaunch(launch);
     res.status(201).json(addedLaunch);
-  } catch (err) {
-    console.error(err);
+  } catch (err: unknown) {
+    if (err instanceof Error && err.message === "No matching planet founded") {
+      res.status(400).json(ErrorResponse.generate(400, ["destination"]));
+    }
     res.status(500).json(ErrorResponse.generate(500, [JSON.stringify(err)]));
   }
 };

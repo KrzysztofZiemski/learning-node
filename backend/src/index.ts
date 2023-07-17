@@ -1,22 +1,15 @@
 import http from "http";
-import mongoose from "mongoose";
 import "dotenv/config";
 import app from "./app";
 import { loadPlanetData } from "./models/planets.model";
+import { connectDatabase } from "./services/mongo";
 
 const PORT = process.env.PORT || 8000;
 
 const server = http.createServer(app);
 
 async function startServer() {
-  const uri = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}.hd0xd5k.mongodb.net/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`;
-
-  await mongoose
-    .connect(uri)
-    .then(() => console.log("Mongo connected!"))
-    .catch((err) => {
-      console.error(err);
-    });
+  await connectDatabase();
   await loadPlanetData();
 
   server.listen(PORT, () => {
