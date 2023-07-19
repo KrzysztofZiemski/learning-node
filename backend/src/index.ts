@@ -2,6 +2,7 @@ import http from "http";
 import "dotenv/config";
 import app from "./app";
 import { loadPlanetData } from "./models/planets.model";
+import { loadLaunchesData } from "./models/launches.model";
 import { connectDatabase } from "./services/mongo";
 
 const PORT = process.env.PORT || 8000;
@@ -11,6 +12,7 @@ const server = http.createServer(app);
 async function startServer() {
   await connectDatabase();
   await loadPlanetData();
+  console.log(await loadLaunchesData());
 
   server.listen(PORT, () => {
     console.log(`listen on port ${PORT}`);
