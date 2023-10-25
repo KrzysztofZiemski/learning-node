@@ -2,7 +2,7 @@ import { ErrorResponse } from "../../helpers/errorResponse";
 import { Validator } from "../../helpers/validator";
 import { IRouterFunction } from "../../interfaces/router";
 import {
-  saveLaunch,
+  scheduleNewLaunch,
   getAllLaunches,
   abortLaunch,
   getLaunch,
@@ -25,7 +25,7 @@ export const httpAddNewLaunch: IRouterFunction = async (req, res) => {
   }
 
   try {
-    const addedLaunch = await saveLaunch(launch);
+    const addedLaunch = await scheduleNewLaunch(launch);
     res.status(201).json(addedLaunch);
   } catch (err: unknown) {
     if (err instanceof Error && err.message === "No matching planet founded") {

@@ -33,11 +33,13 @@ export const loadPlanetData = (): Promise<void> => {
 };
 export const savePlanet = async ({ keplerName }: IPlanet) => {
   try {
-    return await planets.updateOne(
+    const res = await planets.updateOne(
       { keplerName },
       { keplerName },
       { upsert: true }
     );
+
+    return;
   } catch (err) {
     console.error("Could save planet", err);
   }

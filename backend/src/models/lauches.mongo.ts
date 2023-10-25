@@ -24,7 +24,7 @@ const launchesSchema = new Schema({
   },
   target: {
     type: String,
-    required: true,
+    // required: true,
     // type: Types.ObjectId,
     // ref: "Planet",
   },

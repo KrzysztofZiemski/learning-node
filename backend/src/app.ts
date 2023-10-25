@@ -1,9 +1,6 @@
 import express from "express";
-import fs from "fs";
 import cors, { CorsOptions } from "cors";
 import { join } from "path";
-import planetsRouter from "./routes/planets/planets.router";
-import { launchesRouter } from "./routes/launches/launches.router";
 import { initLogs } from "./lib/initLogs";
 import { apiV1 } from "./routes/api_v1";
 
@@ -30,11 +27,11 @@ const corsOptions: CorsOptions | undefined = isProd
 app.use(cors(corsOptions));
 
 app.use(initLogs);
-app.use(express.static(join(__dirname, "..", "public")));
-app.use(express.json());
-
 //routers
 app.use("/v1", apiV1);
+app.use(express.json());
+
+app.use(express.static(join(__dirname, "..", "public")));
 
 app.get("/*", (_, res) => {
   res.sendFile(join(__dirname, "..", "public", "index.html"));
