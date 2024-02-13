@@ -3,12 +3,18 @@ import { ILaunch, ILaunchPayload, ISpaceXLaunch } from "../interfaces/launch";
 import { launches } from "./lauches.mongo";
 import { planets } from "./planets.mongo";
 import { FilterQuery } from "mongoose";
+import { Pagination } from "./pagination.model";
 
 const DEFAULT_FLIGHT_NUMBER = 100;
 const SPACEX_API_URL = "https://api.spacexdata.com/v4/launches/query";
 
-export const getAllLaunches = async () => {
-  return await launches.find({}, { __v: 0 });
+export const getAllLaunches = async ({ skip, limit }: Pagination) => {
+  console.log(skip, limit);
+  return await launches
+    .find({}, { __v: 0 })
+    .sort({ flightNumber: -1 })
+    .skip(skip)
+    .limit(limit);
 };
 
 export const getLaunch = async (flightNumber: number) => {

@@ -27,9 +27,10 @@ const corsOptions: CorsOptions | undefined = isProd
 app.use(cors(corsOptions));
 
 app.use(initLogs);
+app.use(express.json());
+
 //routers
 app.use("/v1", apiV1);
-app.use(express.json());
 
 app.use(express.static(join(__dirname, "..", "public")));
 

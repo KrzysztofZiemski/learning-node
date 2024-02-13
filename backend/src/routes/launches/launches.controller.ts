@@ -1,3 +1,4 @@
+import { ParsedQs } from "qs";
 import { ErrorResponse } from "../../helpers/errorResponse";
 import { Validator } from "../../helpers/validator";
 import { IRouterFunction } from "../../interfaces/router";
@@ -8,15 +9,16 @@ import {
   getLaunch,
 } from "../../models/launches.model";
 import { validateLaunch } from "./launches.validator";
+import { getPagination } from "../../services/query";
 
-export const httpGetAllLaunches: IRouterFunction = async (_, res) => {
-  res.status(200).json(await getAllLaunches());
+export const httpGetAllLaunches: IRouterFunction = async (req, res) => {
+  res.status(200).json(await getAllLaunches(getPagination(req.query)));
 };
 
 export const httpAddNewLaunch: IRouterFunction = async (req, res) => {
-  const launch = req.body;
+  const launch = req?.body || {};
 
-  launch.launchDate = new Date(launch.launchDate);
+  launch.launchDate = launch.launchDate && new Date(launch.launchDate);
 
   const invalidFields = validateLaunch(launch);
 
