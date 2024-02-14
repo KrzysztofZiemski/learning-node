@@ -12,7 +12,7 @@ jobs:
       - name: Use node.js version 20
         uses: actions/setup-node@v3
         with:
-          node-version: "16"
+          node-version: "20"
       - run: npm run install:frontend
       - run: npm run install:backend
       - run: npm run build:frontend
